@@ -22,8 +22,13 @@ namespace BookRentalSystem
 
             Author author2 = new("Ken", "Follet");
             Book book2 = new Book(2, author2, "The Pillars of the Earth", "Historical");
-            books.Add(book1);
+            books.Add(book2);
             author2.authorBooks.Add(book2.Title);
+
+            Author author3 = new("Rachel", "Abbot");
+            Book book3 = new Book(3, author3, "Right Behind You", "Detective");
+            books.Add(book1);
+            author3.authorBooks.Add(book3.Title);
 
         }
 
