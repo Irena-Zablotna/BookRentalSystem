@@ -9,7 +9,7 @@ namespace BookRentalSystem
     public class UserService
     {
         private List<User> users = new List<User>();
-       
+
         public void InitalizeUsers()
         {
             User user1 = new User(1, "Admin");
@@ -19,15 +19,16 @@ namespace BookRentalSystem
             users.Add(new(2, "Irena"));
             users.Add(new(3, "Robert"));
         }
-         public bool verifyAdmin (string username)
+        public bool VerifyAdmin(string username)
         {
             foreach (var user in users)
             {
-                if( (username == user.Name) &&  (user.IsAdmin = true)) { 
-                    break;
+                if (username == user.Name && user.IsAdmin == true)
+                {
+                    return true;
                 }
             }
-            return true;
+            return false;
         }
     }
-}
+    }
