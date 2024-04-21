@@ -13,12 +13,13 @@ namespace BookRentalSystem
         public bool IsAdmin { get; set; }
        
 
-        public User(string name, int id)
+        public User(int id, string name)
         {
             Name = name;
             Id = id;
             IsAdmin = false;
         }
+
         public List<Book> Books { get; set; }
     }
 }
