@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,8 +10,6 @@ namespace BookRentalSystem
     public class BookService
     {
         private List<Book> books = new List<Book>();
-        public UserService userService = new UserService();
-        
         
 
         public void InitializeBooks()
@@ -33,10 +32,7 @@ namespace BookRentalSystem
         }
 
         public void AddBook()
-        { Console.WriteLine("Enter your username");
-            string username = Console.ReadLine();
-            if (userService.verifyAdmin(username))
-            {
+        {
                 Console.Write("Insert the name of the author: ");
                 string name = Console.ReadLine();
                 Console.Write("Insert the surname name of the author: ");
@@ -56,18 +52,15 @@ namespace BookRentalSystem
                 Console.WriteLine($"Category: {addedBook.Category}");
                 Console.WriteLine($"Is Available: {addedBook.IsAvailable}");
             }
-            else { Console.WriteLine(" Sorry, only Admin can add a new book"); }
-        }
 
-
-        public int RetrieveRemoveId()
+        public int RetrieveBookId()
         {
             bool isValidInput = false;
-            int removeId = 0;
+            int myId = 0;
             while (!isValidInput)
             {
-                Console.WriteLine("Please enter id of book you want to remove");
-                if (int.TryParse(Console.ReadLine(), out removeId))
+                Console.WriteLine("Please enter id of the book");
+                if (int.TryParse(Console.ReadLine(), out myId))
                 {
                     isValidInput = true;
                 }
@@ -77,37 +70,36 @@ namespace BookRentalSystem
                     isValidInput = false;
                 }
             }
-            return removeId;
+            return myId;
         }
 
         public void RemoveBook()
         {
-            int removeId = RetrieveRemoveId();
-            Book bookToRemove = null;
-            foreach (Book book in books)
-            {
-                if(book.Id == removeId)
+                int removeId = RetrieveBookId();
+                Book bookToRemove = null;
+                foreach (Book book in books)
                 {
-                    bookToRemove = book;
-                    break; 
+                    if (book.Id == removeId)
+                    {
+                        bookToRemove = book;
+                        break;
+                    }
                 }
-            }
-            if (bookToRemove != null)
-            {
-                books.Remove(bookToRemove);
-                Console.WriteLine($"Book {bookToRemove.Id} - {bookToRemove.Title} removed");
-            }
-            else
-            {
-                Console.WriteLine("Book not found");
-            }
-        }
+                if (bookToRemove != null)
+                {
+                    books.Remove(bookToRemove);
+                    Console.WriteLine($"Book {bookToRemove.Id} - {bookToRemove.Title} removed");
+                }
+                else
+                {
+                    Console.WriteLine("Book not found");
+                }
+             }
 
         public void SearchBookByAuthor()
         {
             Console.Write("Enter the surname of the Author: ");
             string author = Console.ReadLine();
-
             bool found = false; 
 
             foreach (var book in books)
@@ -125,7 +117,7 @@ namespace BookRentalSystem
         }
         public void SearchBookByCategory()
         {
-            Console.Write("Enter category: ");
+            Console.Write("Enter a category: ");
             string category = Console.ReadLine();
 
             foreach (var book in books)
@@ -140,10 +132,20 @@ namespace BookRentalSystem
                 }
             }
         }
-
+        public void PrintCategories()
+        {
+            List<string> categories = new List<string>();   
+            foreach (var book in books)
+            {
+                categories.Add(book.Category);
+            }
+            for (int i = 0; i < categories.Count; i++) {
+                Console.WriteLine(categories[i]);
+            }
+        }
         public void SearchBookByTitle()
         {
-            //to do
+           Console.WriteLine("to do");
         }
 
         //public void DisplayBookStatus()
@@ -153,25 +155,36 @@ namespace BookRentalSystem
 
         public void RentBook()
         {
-            // to do 
+            Console.WriteLine("to do");
         }
 
         public void RateBook()
         {
-            // do to 
+            Console.WriteLine("to do");
         }
 
         public void ReadBookRatings()
         {
-            // to do
+            Console.WriteLine("to do");
         }
 
-      
 
+        public void ReturnBook()
+        {
+                Book book1 = new Book();
+                int myId = RetrieveBookId();
+                foreach (var book in books)
+                {
+                    if (myId == book1.Id)
+                    {
+                        book.IsAvailable = true;
+                    }
+                }
+            }
 
         public void DisplayStatistics()
         {
-            // to do 
+            Console.WriteLine("to do");
         }
     }
 }

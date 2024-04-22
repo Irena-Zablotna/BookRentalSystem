@@ -4,24 +4,87 @@
     {
         static void Main(string[] args)
         {
-            //salutare l'utente
-            //presentare il menu con la scelta per utente o admin
-            // utente sceglie l'azione dal menu
-            //admin sceglie l'azione dal menu
-            //utente:
-            //scelta del libro dal titolo
-            //scelta del libro dall'autore
-            //scelta del libro dal genere
-            //scelta del libro dal rating (stelle)
-            //rating del libro
-            //nolleggio .- indicare la data di restituzione quanti giorni
-            //prenotazione 
-            //admin aggiunge il libro
-            //toglie il libro (dal id oppure titolo)
-            //visualizza status del libro
-            //visualizza prenotazioni
-           //visualizza statistiche (quanti libri nolleggiati, quanti liberi, recensioni)
-           
+           UserService userService = new UserService();
+           BookService bookService = new BookService();
+           MenuActionService menuActionService = new MenuActionService();
+            bookService.InitializeBooks();
+            userService.InitalizeUsers();
+            menuActionService.InitializeMenu();
+            bool adm = false;
+            bool user = false;
+            
+
+            menuActionService.PrintWelcomeMessage();
+            int checkUser = userService.VerifyUser();
+            if (checkUser == 1)
+            {
+                adm = true;
+            }
+            else if (checkUser == 2)
+            {
+                user = true;
+            }
+
+                while (true)
+            {
+                menuActionService.DisplayMenuByCategory(adm);
+                Console.Write("\nPlease, enter Action id : ");
+                int choice = int.Parse(Console.ReadLine());
+                    switch (choice)
+                    {
+                        case 1:
+                        bookService.SearchBookByAuthor(); 
+                            break;
+                        case 2:
+                        bookService.PrintCategories();
+                        bookService.SearchBookByCategory();
+                            break;
+                        case 3:bookService.SearchBookByTitle();
+                            break;
+                        case 4:
+                        Console.WriteLine("Work in progress");
+                            break;
+                        case 5:
+                        Console.WriteLine("Work in progress");
+                        break;
+                        case 6:
+                        Console.WriteLine("Work in progress");
+                        break;
+                        case 7:
+                        Console.WriteLine("Work in progress");
+                        break;
+                        case 8:
+                        Console.WriteLine("Work in progress");
+                        break;
+                        case 9:
+                        bookService.AddBook();
+                        break;
+                        case 10:
+                        Console.WriteLine("Work in progress");
+                        break;
+                        case 11:
+                        Console.WriteLine("Work in progress");
+                        break;
+                         case 12:
+                        Console.WriteLine("Work in progress");
+                        break;
+                        case 0:
+                            Environment.Exit(0);
+                            break;
+                        default:
+                        Console.WriteLine("Action you entered does not exist");
+                        break;
+                    }
+                if (choice == 0)
+                    break;
+
+                if (choice >= 12)
+                    continue;
+
+                Console.Write("Would you like to return to the main menu? (y/n): ");
+                if (Console.ReadLine().ToLower() != "y")
+                    break;
+            }
         }
     }
 }

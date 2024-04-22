@@ -19,6 +19,10 @@ namespace BookRentalSystem
             Id = id;
             IsAdmin = false;
         }
+        public User(string name)
+        {
+            Name = name;
+        }
 
         public List<Book> Books { get; set; }
     }

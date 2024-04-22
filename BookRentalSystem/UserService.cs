@@ -8,7 +8,7 @@ namespace BookRentalSystem
 {
     public class UserService
     {
-        private List<User> users = new List<User>();
+        public List<User> users = new List<User>();
 
         public void InitalizeUsers()
         {
@@ -19,16 +19,58 @@ namespace BookRentalSystem
             users.Add(new(2, "Irena"));
             users.Add(new(3, "Robert"));
         }
-        public bool VerifyAdmin(string username)
+        public int VerifyUser()
         {
+            Console.WriteLine("Enter your username");
+            string username = Console.ReadLine();
+            Console.WriteLine($"Hello {username}!");
             foreach (var user in users)
             {
                 if (username == user.Name && user.IsAdmin == true)
                 {
-                    return true;
+                    return 1;
+                }
+                else if(username == user.Name && user.IsAdmin == false)
+                {
+                    return 2;
                 }
             }
-            return false;
+            return 0;
+        }
+       
+
+        public void RegisterUser()
+        {
+            bool IsRegistered = false;
+            while (!IsRegistered)
+            {
+                Console.WriteLine("Enter your username ");
+                string username = Console.ReadLine();
+                bool usernameExists = false;
+                foreach (var user in users)
+                {
+                    if (username == user.Name)
+                    {
+                        usernameExists = true;
+                        break;
+                    }
+                }
+                if (!usernameExists)
+                {
+                    User newUser = new User(username);
+                    newUser.IsAdmin = false;
+                    newUser.Id = users.Count + 1;
+                    users.Add(newUser);
+                    Console.WriteLine($"You have been successfully registered. Your id is {newUser.Id}");
+                    IsRegistered = true;
+                }
+                else
+                {
+                    Console.WriteLine("This username already exists, try another one");
+                    IsRegistered = false;
+                }
+            }
         }
     }
-    }
+}
+
