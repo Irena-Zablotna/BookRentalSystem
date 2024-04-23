@@ -19,11 +19,20 @@ namespace BookRentalSystem
             users.Add(new(2, "Irena"));
             users.Add(new(3, "Robert"));
         }
-        public int VerifyUser()
+
+        public string RetrieveUsername()
         {
-            Console.WriteLine("Enter your username");
+            Console.WriteLine("Enter you username");
             string username = Console.ReadLine();
             Console.WriteLine($"Hello {username}!");
+            if (username == null || username.Length == 0)
+            {
+                return null;
+            }
+            return username;
+        }
+        public int VerifyUser( string username)
+        {
             foreach (var user in users)
             {
                 if (username == user.Name && user.IsAdmin == true)

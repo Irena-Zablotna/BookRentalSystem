@@ -12,10 +12,10 @@
             menuActionService.InitializeMenu();
             bool adm = false;
             bool user = false;
-            
 
             menuActionService.PrintWelcomeMessage();
-            int checkUser = userService.VerifyUser();
+            string username = userService.RetrieveUsername();   
+            int checkUser = userService.VerifyUser(username);
             if (checkUser == 1)
             {
                 adm = true;
@@ -24,6 +24,7 @@
             {
                 user = true;
             }
+
 
                 while (true)
             {
@@ -42,7 +43,7 @@
                         case 3:bookService.SearchBookByTitle();
                             break;
                         case 4:
-                        Console.WriteLine("Work in progress");
+                        bookService.DisplayBookStatus();
                             break;
                         case 5:
                         Console.WriteLine("Work in progress");

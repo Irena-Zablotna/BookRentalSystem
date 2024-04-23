@@ -26,7 +26,7 @@ namespace BookRentalSystem
 
             Author author3 = new("Rachel", "Abbot");
             Book book3 = new Book(3, author3, "Right Behind You", "Detective");
-            books.Add(book1);
+            books.Add(book3);
             author3.authorBooks.Add(book3.Title);
 
         }
@@ -119,17 +119,19 @@ namespace BookRentalSystem
         {
             Console.Write("Enter a category: ");
             string category = Console.ReadLine();
-
+            bool found = false;
             foreach (var book in books)
-            {
+            {   
+                
                 if (book.Category.Equals(category, StringComparison.OrdinalIgnoreCase))
                 {
-                    Console.WriteLine($" title {book.Title}, author {book.Author.Name} , {book.Author.Surname}, is availabile? {book.IsAvailable}");
+                    Console.WriteLine($" title {book.Title}, author {book.Author.Name}  {book.Author.Surname}, is book availabile? {book.IsAvailable}");
+                    found = true;
                 }
-                else
-                {
-                    Console.WriteLine("Book not found");
-                }
+            }
+            if (!found)
+            {
+                Console.WriteLine("No books found for the specified category.");
             }
         }
         public void PrintCategories()
@@ -148,15 +150,47 @@ namespace BookRentalSystem
            Console.WriteLine("to do");
         }
 
-        //public void DisplayBookStatus()
-        //{
-        //    to do
-        //}
-
-        public void RentBook()
+        public void DisplayBookStatus()
         {
-            Console.WriteLine("to do");
+            Console.Write("Enter the title of the book: ");
+            string title = Console.ReadLine();
+
+            foreach (var book in books)
+            {
+                if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
+                {
+                    Console.WriteLine($"Book status '{book.Title}': {(book.IsAvailable ? "Available" : "Rented")}");
+                    return;
+                }
+            }
+            Console.WriteLine("Book not found");
         }
+
+            public void RentBook(bool checkuser, string username)
+            {
+                Console.Write("Enter the title of the book you want to rent: ");
+                string title = Console.ReadLine();
+
+                foreach (var book in books)
+                {
+                    if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
+                    {
+                        if (book.IsAvailable)
+                        {
+                            book.IsAvailable = false;
+                            Console.WriteLine($"You have rented {book.Title}.");
+
+                        }
+                        else
+
+                            Console.WriteLine($"{book.Title} is not available.");
+                    }
+                    return;
+                }
+                Console.WriteLine("Book not found.");
+            }
+            
+        
 
         public void RateBook()
         {
