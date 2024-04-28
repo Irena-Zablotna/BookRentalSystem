@@ -22,8 +22,9 @@ namespace BookRentalSystem
         public User(string name)
         {
             Name = name;
+            Books = new List<Book>();
         }
-
-        public List<Book> Books { get; set; }
+        
+        public List<Book>? Books { get; set; }
     }
 }

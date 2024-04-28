@@ -46,37 +46,42 @@ namespace BookRentalSystem
             }
             return 0;
         }
-       
 
-        public void RegisterUser()
+
+        public string RegisterUser(string name)
         {
-            bool IsRegistered = false;
-            while (!IsRegistered)
+            while (true)
             {
-                Console.WriteLine("Enter your username ");
-                string username = Console.ReadLine();
                 bool usernameExists = false;
+
                 foreach (var user in users)
                 {
-                    if (username == user.Name)
+                    if (name == user.Name)
                     {
                         usernameExists = true;
                         break;
                     }
                 }
+
                 if (!usernameExists)
                 {
-                    User newUser = new User(username);
+                    Console.WriteLine($"Do you want to be register with username {name}? (y/n): ");
+                    if (Console.ReadLine().ToLower() != "y")
+                    {
+                        Console.WriteLine("Please write the username you would like to register with.");
+                        name= Console.ReadLine();
+                    }
+                    User newUser = new User(name);
                     newUser.IsAdmin = false;
                     newUser.Id = users.Count + 1;
                     users.Add(newUser);
-                    Console.WriteLine($"You have been successfully registered. Your id is {newUser.Id}");
-                    IsRegistered = true;
+                    Console.WriteLine($"You have been successfully registered. Your id is {newUser.Id}, your username is {name}");
+                    return newUser.Name; 
                 }
                 else
                 {
                     Console.WriteLine("This username already exists, try another one");
-                    IsRegistered = false;
+                   
                 }
             }
         }

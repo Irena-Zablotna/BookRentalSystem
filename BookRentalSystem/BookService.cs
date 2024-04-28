@@ -166,7 +166,14 @@ namespace BookRentalSystem
             Console.WriteLine("Book not found");
         }
 
-            public void RentBook(bool checkuser, string username)
+        public string RentBook(int check, string usernameNow)
+        {
+            if (check == 0)
+            {
+                Console.WriteLine("You need to register before renting a book.");
+                return String.Empty;
+            }
+            else
             {
                 Console.Write("Enter the title of the book you want to rent: ");
                 string title = Console.ReadLine();
@@ -177,29 +184,62 @@ namespace BookRentalSystem
                     {
                         if (book.IsAvailable)
                         {
+                            Console.Write("Enter the number of days you want to rent the book for: ");
+                            int numberOfDays = int.Parse(Console.ReadLine());
+
+                            DateTime returnDate = DateTime.Now.AddDays(numberOfDays);
+                            book.ReturnDate = returnDate;
                             book.IsAvailable = false;
-                            Console.WriteLine($"You have rented {book.Title}.");
-
+                            Console.WriteLine($"You have rented {book.Title} for {numberOfDays} days. Return by: {returnDate.ToShortDateString()}.");
+                            book.Users.Add(new User(usernameNow));
+                            //userNow.Books.Add(book);
+                            return book.Title;
                         }
-                        else
-
-                            Console.WriteLine($"{book.Title} is not available.");
                     }
-                    return;
+                    else
+                    {
+                        Console.WriteLine($"{book.Title} is not available.");
+                    }
                 }
-                Console.WriteLine("Book not found.");
             }
-            
-        
+            Console.WriteLine("Book not found.");
+            return String.Empty;
+        }
 
-        public void RateBook()
+
+        public void RateBook(string username)
         {
-            Console.WriteLine("to do");
+            Console.WriteLine("Please, enter a title of the book you want to rate");
+            String title = Console.ReadLine();
+            User  ratingUser = new User(username);
+            Book rentedBook = ratingUser.Books.FirstOrDefault(b => b.Title == title);
+            if (rentedBook == null)
+            {
+                Console.WriteLine($"User {username} hasn't rented the book {title}.");
+                return;
+            }
+            Console.WriteLine($"Please rate the book '{title}' (from 0 to 5): ");
+            int rating = 0;
+            bool isValidInput = false;
+            while (!isValidInput)
+            {
+                string input = Console.ReadLine();
+                if (int.TryParse(input, out rating) && rating >= 0 && rating <= 5)
+                {
+                    isValidInput=true; 
+                }
+                else
+                {
+                    Console.WriteLine("Invalid rating. Please enter a number from 0 to 5.");
+                }
+            }
+            rentedBook.Ratings.Add(rating);
+            Console.WriteLine($"Rating {rating} added successfully for the book {title}.");
         }
 
         public void ReadBookRatings()
         {
-            Console.WriteLine("to do");
+            
         }
 
 
@@ -218,8 +258,9 @@ namespace BookRentalSystem
 
         public void DisplayStatistics()
         {
-            Console.WriteLine("to do");
+            
         }
+
     }
 }
 

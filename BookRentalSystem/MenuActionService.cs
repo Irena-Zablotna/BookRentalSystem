@@ -17,15 +17,15 @@ namespace BookRentalSystem
 
         public void InitializeMenu()
         {
-            actionsToChoose.Add(new(1,"Search book by author", "userCategory"));
-            actionsToChoose.Add(new(2, "Search book by category", "userCategory"));
-            actionsToChoose.Add(new(3, "Search book by title", "userCategory"));
+            actionsToChoose.Add(new(1,"Search book by author", "genericCategory"));
+            actionsToChoose.Add(new(2, "Search book by category", "genericCategory"));
+            actionsToChoose.Add(new(3, "Search book by title", "genericCategory"));
             actionsToChoose.Add(new(4, "View book status", "userCategory"));
-            actionsToChoose.Add(new(5, "Reserve the book", "userCategory"));
+            actionsToChoose.Add(new(5, "Rent the book", "userCategory"));
             actionsToChoose.Add(new(6, "Rate the book", "userCategory"));
             actionsToChoose.Add(new(7, "Return the book", "userCategory"));
             actionsToChoose.Add(new(8, "Read ratings by title", "userCategory"));
-            actionsToChoose.Add(new(9, "Create a new account", "userCategory"));
+            actionsToChoose.Add(new(9, "Create a new account", "genericCategory"));
 
             actionsToChoose.Add(new(10, "Add a new book", "adminCategory"));
             actionsToChoose.Add(new(11, "Remove a book", "adminCategory"));
@@ -39,7 +39,7 @@ namespace BookRentalSystem
             Console.WriteLine("Welcome to our automatic Book Rental Service!");
            
         }
-        public void DisplayMenuByCategory(bool adm)
+        public void DisplayMenuByCategory(bool adm, bool user)
         {
             if (adm)
             {
@@ -51,11 +51,21 @@ namespace BookRentalSystem
                     }
                 }
             }
-            else 
+            else if (user)
             {
                 foreach (var menuAction in actionsToChoose)
                 {
                     if (menuAction.MenuCategory == "userCategory" || menuAction.MenuCategory == null)
+                    {
+                        Console.WriteLine($"{menuAction.Id} {menuAction.Name}");
+                    }
+                }
+            }
+            else
+            {
+                foreach (var menuAction in actionsToChoose)
+                {
+                    if (menuAction.MenuCategory == "genericCategory" || menuAction.MenuCategory == null)
                     {
                         Console.WriteLine($"{menuAction.Id} {menuAction.Name}");
                     }

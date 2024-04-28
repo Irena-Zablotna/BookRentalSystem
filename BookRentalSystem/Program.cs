@@ -12,23 +12,37 @@
             menuActionService.InitializeMenu();
             bool adm = false;
             bool user = false;
-
+           
             menuActionService.PrintWelcomeMessage();
-            string username = userService.RetrieveUsername();   
-            int checkUser = userService.VerifyUser(username);
-            if (checkUser == 1)
-            {
-                adm = true;
-            }
-            else if (checkUser == 2)
-            {
-                user = true;
-            }
-
-
+            string usernameNow;    
+           
                 while (true)
             {
-                menuActionService.DisplayMenuByCategory(adm);
+                menuActionService.DisplayMenuByCategory(adm, user);
+                Console.WriteLine("More features are available only for registered users, do you want to proceed (y/n)" );
+                if (Console.ReadLine().ToLower() != "y")
+                {
+                    break;
+                }
+                usernameNow = userService.RetrieveUsername();
+                int checkUser = userService.VerifyUser(usernameNow);
+                if (checkUser == 1)
+                {
+                    adm = true;
+                }
+               if (checkUser == 2)
+                {
+                    user = true;
+                }
+                else if (checkUser == 0)
+                {
+                    string result = userService.RegisterUser(usernameNow);
+                    if (!String.IsNullOrEmpty(result)){
+                        user = true;
+                        usernameNow = result;
+                    }
+                }
+                menuActionService.DisplayMenuByCategory(adm, user);
                 Console.Write("\nPlease, enter Action id : ");
                 int choice = int.Parse(Console.ReadLine());
                     switch (choice)
@@ -46,10 +60,15 @@
                         bookService.DisplayBookStatus();
                             break;
                         case 5:
-                        Console.WriteLine("Work in progress");
+                         string rentedBook = bookService.RentBook(checkUser, usernameNow);
+                        if (!String.IsNullOrEmpty(rentedBook))
+                        {
+                            User actualUser = new User(usernameNow);
+                            actualUser.Books.Add(new Book(rentedBook));
+                        }
                         break;
                         case 6:
-                        Console.WriteLine("Work in progress");
+                        bookService.RateBook(usernameNow);
                         break;
                         case 7:
                         Console.WriteLine("Work in progress");

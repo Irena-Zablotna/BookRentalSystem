@@ -13,6 +13,7 @@ namespace BookRentalSystem
         public string Title { get; }
         public string Category { get; }
         public bool IsAvailable { get; set; }
+        public DateTime? ReturnDate { get; set; }
         public List<int>? Ratings { get; } 
         public List <User>? Users { get; }
         public Book(int id, Author author, string title, string category)
