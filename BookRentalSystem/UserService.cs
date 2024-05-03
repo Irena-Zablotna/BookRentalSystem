@@ -48,7 +48,7 @@ namespace BookRentalSystem
         }
 
 
-        public string RegisterUser(string name)
+        public bool RegisterUser(string name)
         {
             while (true)
             {
@@ -65,7 +65,7 @@ namespace BookRentalSystem
 
                 if (!usernameExists)
                 {
-                    Console.WriteLine($"Do you want to be register with username {name}? (y/n): ");
+                    Console.WriteLine($"Do you want to be registered with username {name}? (y/n): ");
                     if (Console.ReadLine().ToLower() != "y")
                     {
                         Console.WriteLine("Please write the username you would like to register with.");
@@ -76,7 +76,7 @@ namespace BookRentalSystem
                     newUser.Id = users.Count + 1;
                     users.Add(newUser);
                     Console.WriteLine($"You have been successfully registered. Your id is {newUser.Id}, your username is {name}");
-                    return newUser.Name; 
+                    return true; 
                 }
                 else
                 {

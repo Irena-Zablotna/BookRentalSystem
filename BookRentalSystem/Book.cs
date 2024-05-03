@@ -14,8 +14,8 @@ namespace BookRentalSystem
         public string Category { get; }
         public bool IsAvailable { get; set; }
         public DateTime? ReturnDate { get; set; }
-        public List<int>? Ratings { get; } 
-        public List <User>? Users { get; }
+        public List<int> Ratings { get; } 
+        public List <User> Users { get; }
         public Book(int id, Author author, string title, string category)
         {
             Author = author;
@@ -27,14 +27,15 @@ namespace BookRentalSystem
         }
         public override string ToString()
         {
-            return $"{Title} by {Author.Name} {Author.Surname} ({Category}) {(IsAvailable ? "- Available" : "- Rented")}";
+            return $"{Title} by {Author.Name} {Author.Surname} ({Category}) {(IsAvailable ? "- Available" : "- Rented until ")}{ReturnDate}";
         }
         public Book()
         {
         }
         public Book(string title)
         {
-            Title = title;  
+            Title = title; 
+            Ratings = new List<int>();
         }
     }
 }

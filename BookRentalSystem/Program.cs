@@ -4,107 +4,100 @@
     {
         static void Main(string[] args)
         {
-           UserService userService = new UserService();
-           BookService bookService = new BookService();
-           MenuActionService menuActionService = new MenuActionService();
+            UserService userService = new UserService();
+            BookService bookService = new BookService();
+            MenuActionService menuActionService = new MenuActionService();
             bookService.InitializeBooks();
             userService.InitalizeUsers();
             menuActionService.InitializeMenu();
             bool adm = false;
             bool user = false;
-           
+            int choice;
             menuActionService.PrintWelcomeMessage();
-            string usernameNow;    
-           
-                while (true)
+            string usernameNow = userService.RetrieveUsername();
+            User actualUser = new User(usernameNow);
+            int checkUser = userService.VerifyUser(usernameNow);
+            if (checkUser == 1)
             {
-                menuActionService.DisplayMenuByCategory(adm, user);
-                Console.WriteLine("More features are available only for registered users, do you want to proceed (y/n)" );
-                if (Console.ReadLine().ToLower() != "y")
-                {
-                    break;
-                }
-                usernameNow = userService.RetrieveUsername();
-                int checkUser = userService.VerifyUser(usernameNow);
-                if (checkUser == 1)
-                {
-                    adm = true;
-                }
-               if (checkUser == 2)
+                adm = true;
+            }
+            if (checkUser == 2)
+            {
+                user = true;
+            }
+            else if (checkUser == 0)
+            {
+                bool isRegistered = userService.RegisterUser(usernameNow);
+                if (isRegistered)
                 {
                     user = true;
                 }
-                else if (checkUser == 0)
-                {
-                    string result = userService.RegisterUser(usernameNow);
-                    if (!String.IsNullOrEmpty(result)){
-                        user = true;
-                        usernameNow = result;
-                    }
-                }
+            }
+
+            bool exitRequested = false;
+
+            while (!exitRequested)
+            {
+                Console.Write("Let me know what you would like to do.\nPlease, enter Action id : \n");
                 menuActionService.DisplayMenuByCategory(adm, user);
-                Console.Write("\nPlease, enter Action id : ");
-                int choice = int.Parse(Console.ReadLine());
+                if (int.TryParse(Console.ReadLine(), out choice))
+                {
                     switch (choice)
                     {
                         case 1:
-                        bookService.SearchBookByAuthor(); 
+                            bookService.SearchBookByAuthor();
                             break;
                         case 2:
-                        bookService.PrintCategories();
-                        bookService.SearchBookByCategory();
+                            bookService.PrintCategories();
+                            bookService.SearchBookByCategory();
                             break;
-                        case 3:bookService.SearchBookByTitle();
+                        case 3:
+                            bookService.SearchBookByTitle();
                             break;
                         case 4:
-                        bookService.DisplayBookStatus();
+                            bookService.DisplayBookStatus();
                             break;
                         case 5:
-                         string rentedBook = bookService.RentBook(checkUser, usernameNow);
-                        if (!String.IsNullOrEmpty(rentedBook))
-                        {
-                            User actualUser = new User(usernameNow);
-                            actualUser.Books.Add(new Book(rentedBook));
-                        }
-                        break;
+                            string rentedBook = bookService.RentBook(usernameNow);
+                            if (!String.IsNullOrEmpty(rentedBook))
+                            {
+                                actualUser.Books.Add(new Book(rentedBook));
+                            }
+                            break;
                         case 6:
-                        bookService.RateBook(usernameNow);
-                        break;
+                            bookService.RateBook(actualUser);
+                            break;
                         case 7:
-                        Console.WriteLine("Work in progress");
-                        break;
+                            Console.WriteLine("Work in progress");
+                            break;
                         case 8:
-                        Console.WriteLine("Work in progress");
-                        break;
+                            Console.WriteLine("Work in progress");
+                            break;
                         case 9:
-                        bookService.AddBook();
-                        break;
+                            Console.WriteLine("Work in progress");
+                            break;
                         case 10:
-                        Console.WriteLine("Work in progress");
-                        break;
+                            bookService.AddBook();
+                            break;
                         case 11:
-                        Console.WriteLine("Work in progress");
-                        break;
-                         case 12:
-                        Console.WriteLine("Work in progress");
-                        break;
+                            Console.WriteLine("Work in progress");
+                            break;
                         case 0:
-                            Environment.Exit(0);
+                            Console.WriteLine("Hello, thank you for using our Book Rental System.");
+                            Thread.Sleep(1500);
+                            exitRequested = true;
                             break;
                         default:
-                        Console.WriteLine("Action you entered does not exist");
-                        break;
+                            Console.WriteLine("Action you entered does not exist");
+                            break;
                     }
-                if (choice == 0)
-                    break;
-
-                if (choice >= 12)
-                    continue;
-
-                Console.Write("Would you like to return to the main menu? (y/n): ");
-                if (Console.ReadLine().ToLower() != "y")
-                    break;
+                }
+                else
+                {
+                    Console.WriteLine("The value you entered is incorrect, try again");
+                }
             }
+
         }
     }
-}
+    }
