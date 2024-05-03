@@ -74,10 +74,10 @@
                             Console.WriteLine("Work in progress");
                             break;
                         case 9:
-                            Console.WriteLine("Work in progress");
+                            bookService.AddBook();
                             break;
                         case 10:
-                            bookService.AddBook();
+                           bookService.RemoveBook();
                             break;
                         case 11:
                             Console.WriteLine("Work in progress");
