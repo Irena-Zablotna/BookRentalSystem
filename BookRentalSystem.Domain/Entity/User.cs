@@ -1,15 +1,15 @@
-﻿using System;
+﻿using BookRentalSystem.Domain.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookRentalSystem
+namespace BookRentalSystem.Domain.Entity
 {
-    public class User
+    public class User:BaseEntity
     {
         public string Name { get; }
-        public int Id { get; set; }
         public bool IsAdmin { get; set; }
         public List<Book> Books { get; set; }
 
@@ -22,7 +22,6 @@ namespace BookRentalSystem
         }
         public User(string name)
         {
-            
             Name = name;
             Books = new List<Book>();
             IsAdmin = false;

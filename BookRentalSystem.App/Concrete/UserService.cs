@@ -1,23 +1,23 @@
-﻿using System;
+﻿using BookRentalSystem.App.Common;
+using BookRentalSystem.Domain.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookRentalSystem
+namespace BookRentalSystem.App.Concrete
 {
-    public class UserService
+    public class UserService:BaseService<User>
     {
-        public List<User> users = new List<User>();
-
         public void InitalizeUsers()
         {
             User user1 = new User(1, "Admin");
-            users.Add(user1);
+            Items.Add(user1);
             user1.IsAdmin = true;
 
-            users.Add(new(2, "Irena"));
-            users.Add(new(3, "Robert"));
+            Items.Add(new(2, "Irena"));
+            Items.Add(new(3, "Robert"));
         }
 
         public string RetrieveUsername()
@@ -33,7 +33,7 @@ namespace BookRentalSystem
         }
         public int VerifyUser( string username)
         {
-            foreach (var user in users)
+            foreach (var user in Items)
             {
                 if (username == user.Name && user.IsAdmin == true)
                 {
@@ -54,7 +54,7 @@ namespace BookRentalSystem
             {
                 bool usernameExists = false;
 
-                foreach (var user in users)
+                foreach (var user in Items)
                 {
                     if (name == user.Name)
                     {
@@ -73,15 +73,14 @@ namespace BookRentalSystem
                     }
                     User newUser = new User(name);
                     newUser.IsAdmin = false;
-                    newUser.Id = users.Count + 1;
-                    users.Add(newUser);
+                    newUser.Id = Items.Count + 1;
+                    Items.Add(newUser);
                     Console.WriteLine($"You have been successfully registered. Your id is {newUser.Id}, your username is {name}");
                     return true; 
                 }
                 else
                 {
                     Console.WriteLine("This username already exists, try another one");
-                   
                 }
             }
         }

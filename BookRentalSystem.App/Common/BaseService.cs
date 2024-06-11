@@ -34,14 +34,14 @@ namespace BookRentalSystem.App.Common
             return item.Id;
         }
 
-        public int UpgradeItem(T item)
+        public int UpdateItem(T item)
         {
             var entity = Items.FirstOrDefault(p=>p.Id == item.Id);
             if(entity != null)
             {
                 entity = item;
             }
-            return item.Id;
+            return entity.Id;
         }
 
         public void RemoveItem(T item)

@@ -10,8 +10,4 @@
     <ProjectReference Include="..\BookRentalSystem.Domain\BookRentalSystem.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Concrete\" />
-  </ItemGroup>
-
 </Project>

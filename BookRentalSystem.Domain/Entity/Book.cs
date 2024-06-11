@@ -1,14 +1,16 @@
-﻿using System;
+﻿using BookRentalSystem.Domain.Common;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookRentalSystem
+namespace BookRentalSystem.Domain.Entity
+
 {
- public class Book
+ public class Book:BaseEntity
     {
-        public int Id { get; set; }
+      
         public  Author Author{ get; set;}
         public string Title { get; }
         public string Category { get; }

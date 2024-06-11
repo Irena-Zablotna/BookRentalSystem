@@ -1,12 +1,14 @@
-﻿using System;
+﻿using BookRentalSystem.App.Common;
+using BookRentalSystem.Domain.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookRentalSystem
+namespace BookRentalSystem.App.Concrete
 {
-    public class MenuActionService
+    public class MenuActionService : BaseService<MenuAction>
     {
         private List<MenuAction> actionsToChoose;
         UserService userService = new UserService();
