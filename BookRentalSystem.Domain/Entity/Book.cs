@@ -27,6 +27,15 @@ namespace BookRentalSystem.Domain.Entity
             Ratings = new List<int>();
             Users = new List<User>();
         }
+        public Book(Author author, string title, string category)
+        {
+            Author = author;
+            Title = title;
+            Category = category;
+            IsAvailable = true;
+            Ratings = new List<int>();
+            Users = new List<User>();
+        }
         public override string ToString()
         {
             return $"{Title} by {Author.Name} {Author.Surname} ({Category}) {(IsAvailable ? "- Available" : "- Rented until ")}{ReturnDate}";
@@ -34,9 +43,9 @@ namespace BookRentalSystem.Domain.Entity
         public Book()
         {
         }
-        public Book(string title)
+        public Book(int id)
         {
-            Title = title; 
+            Id= id;
             Ratings = new List<int>();
         }
     }

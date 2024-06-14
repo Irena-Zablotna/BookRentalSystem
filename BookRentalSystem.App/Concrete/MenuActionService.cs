@@ -15,6 +15,7 @@ namespace BookRentalSystem.App.Concrete
         public MenuActionService()
         {
             actionsToChoose = new List<MenuAction>();
+            InitializeMenu();
         }
 
         public void InitializeMenu()
@@ -46,7 +47,7 @@ namespace BookRentalSystem.App.Concrete
             {
                 foreach (var menuAction in actionsToChoose)
                 {
-                    if (menuAction.MenuCategory == "adminCategory" || menuAction.MenuCategory == null)
+                    if (menuAction.MenuCategory == "adminCategory" || menuAction.MenuCategory == "userCategory" || menuAction.MenuCategory == null)
                     {
                         Console.WriteLine($"{menuAction.Id} {menuAction.Name}");
                     }

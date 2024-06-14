@@ -10,6 +10,10 @@ namespace BookRentalSystem.App.Concrete
 {
     public class UserService:BaseService<User>
     {
+        public UserService()
+        {
+            InitalizeUsers();
+        }
         public void InitalizeUsers()
         {
             User user1 = new User(1, "Admin");
@@ -20,11 +24,8 @@ namespace BookRentalSystem.App.Concrete
             Items.Add(new(3, "Robert"));
         }
 
-        public string RetrieveUsername()
+        public string RetrieveUsername(string username)
         {
-            Console.WriteLine("Enter you username");
-            string username = Console.ReadLine();
-            Console.WriteLine($"Hello {username}!");
             if (username == null || username.Length == 0)
             {
                 return null;
@@ -48,12 +49,9 @@ namespace BookRentalSystem.App.Concrete
         }
 
 
-        public bool RegisterUser(string name)
+        public int RegisterUser(string name)
         {
-            while (true)
-            {
                 bool usernameExists = false;
-
                 foreach (var user in Items)
                 {
                     if (name == user.Name)
@@ -62,27 +60,19 @@ namespace BookRentalSystem.App.Concrete
                         break;
                     }
                 }
-
                 if (!usernameExists)
                 {
-                    Console.WriteLine($"Do you want to be registered with username {name}? (y/n): ");
-                    if (Console.ReadLine().ToLower() != "y")
-                    {
-                        Console.WriteLine("Please write the username you would like to register with.");
-                        name= Console.ReadLine();
-                    }
                     User newUser = new User(name);
                     newUser.IsAdmin = false;
                     newUser.Id = Items.Count + 1;
                     Items.Add(newUser);
-                    Console.WriteLine($"You have been successfully registered. Your id is {newUser.Id}, your username is {name}");
-                    return true; 
+                    return newUser.Id; 
                 }
                 else
                 {
-                    Console.WriteLine("This username already exists, try another one");
+                    return 0;
                 }
-            }
+            
         }
     }
 }

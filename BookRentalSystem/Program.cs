@@ -1,20 +1,23 @@
-﻿namespace BookRentalSystem
+﻿using BookRentalSystem.App.Concrete;
+using BookRentalSystem.App.Managers;
+using BookRentalSystem.Domain.Entity;
+
+namespace BookRentalSystem
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
             UserService userService = new UserService();
             BookService bookService = new BookService();
             MenuActionService menuActionService = new MenuActionService();
-            bookService.InitializeBooks();
-            userService.InitalizeUsers();
-            menuActionService.InitializeMenu();
+            UserManager userManager = new UserManager(userService);
+            BookManager bookManager = new BookManager(bookService);
             bool adm = false;
             bool user = false;
             int choice;
             menuActionService.PrintWelcomeMessage();
-            string usernameNow = userService.RetrieveUsername();
+            string usernameNow = userManager.RetrieveUsername();
             User actualUser = new User(usernameNow);
             int checkUser = userService.VerifyUser(usernameNow);
             if (checkUser == 1)
@@ -27,7 +30,7 @@
             }
             else if (checkUser == 0)
             {
-                bool isRegistered = userService.RegisterUser(usernameNow);
+                bool isRegistered = userManager.RegisterUser(usernameNow);
                 if (isRegistered)
                 {
                     user = true;
@@ -35,7 +38,6 @@
             }
 
             bool exitRequested = false;
-
             while (!exitRequested)
             {
                 Console.Write("Let me know what you would like to do.\nPlease, enter Action id : \n");
@@ -58,8 +60,9 @@
                             bookService.DisplayBookStatus();
                             break;
                         case 5:
-                            string rentedBook = bookService.RentBook(usernameNow);
-                            if (!String.IsNullOrEmpty(rentedBook))
+                            
+                            int rentedBook = bookService.RentBook(usernameNow);
+                            if (rentedBook != null)
                             {
                                 actualUser.Books.Add(new Book(rentedBook));
                             }
@@ -74,7 +77,7 @@
                             Console.WriteLine("Work in progress");
                             break;
                         case 9:
-                            bookService.AddBook();
+                            bookManager.AddBook();
                             break;
                         case 10:
                            bookService.RemoveBook();
@@ -100,4 +103,4 @@
 
         }
     }
-    }
+  }

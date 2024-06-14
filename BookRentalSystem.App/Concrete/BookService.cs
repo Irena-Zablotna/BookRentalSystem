@@ -11,76 +11,55 @@ namespace BookRentalSystem.App.Concrete
 {
     public class BookService:BaseService<Book>
     {
+        public BookService()
+        {
+            InitializeBooks();
+        }
         public void InitializeBooks()
         {
             Author author1 = new("Stephen", "King");
-            Book book1 = new Book(1, author1, "It", "Horror");
+            Book book1 = new Book(1, author1, "It", "horror");
             Items.Add(book1);
+            author1.authorBooks.Add(book1.Title);
+            
+            Book book5 = new Book(5, author1, "It", "horror");
+            Items.Add(book5);
             author1.authorBooks.Add(book1.Title);
 
             Author author2 = new("Ken", "Follet");
-            Book book2 = new Book(2, author2, "The Pillars of the Earth", "Historical");
+            Book book2 = new Book(2, author2, "The Pillars of the Earth", "historical");
             Items.Add(book2);
             author2.authorBooks.Add(book2.Title);
 
             Author author3 = new("Rachel", "Abbot");
-            Book book3 = new Book(3, author3, "Right Behind You", "Detective");
+            Book book3 = new Book(3, author3, "Right Behind You", "detective");
             Items.Add(book3);
             author3.authorBooks.Add(book3.Title);
 
             Author author4 = new("Anthony", "De Barros");
-            Book book4 = new Book(4, author4, "Practical SQL", "Tecnical manual");
+            Book book4 = new Book(4, author4, "Practical SQL", "tecnical manual");
             Items.Add(book4);
             author4.authorBooks.Add(book4.Title);
 
         }
 
-        public int AddBook()
+        public int AddBook(Book book)
         {
-                Console.Write("Insert the name of the author: ");
-                string name = Console.ReadLine();
-                Console.Write("Insert the surname name of the author: ");
-                string surname = Console.ReadLine();
-                Author author = new Author(name, surname);
-                Console.Write("Insert the title of the book: ");
-                string title = Console.ReadLine();
-                Console.Write("Insert the category of the book: ");
-                string category = Console.ReadLine();
-                int id = Items.Count + 1;
-                Book addedBook = new(id, author, title, category);
+             string name = book.Author.Name;
+             string surname = book.Author.Surname;
+             Author author = new Author(name, surname);
+             string title = book.Title;
+             string category = book.Category;
+             int id = Items.Count + 1;
+             Book addedBook = new (id, author, title, category);
                 Items.Add(addedBook);
                 author.authorBooks.Add(addedBook.Title);
-                Console.WriteLine($"Book added succesfully. It's id = {id}");
-                Console.WriteLine($"Title: {addedBook.Title}");
-                Console.WriteLine($"Author: {addedBook.Author.Name} {addedBook.Author.Surname}");
-                Console.WriteLine($"Category: {addedBook.Category}");
-                Console.WriteLine($"Is Available: {addedBook.IsAvailable}");
-            return id;
+            return addedBook.Id;
             }
 
-        public int RetrieveBookId()
-        {
-            bool isValidInput = false;
-            int myId = 0;
-            while (!isValidInput)
-            {
-                Console.WriteLine("Please enter id of the book");
-                if (int.TryParse(Console.ReadLine(), out myId))
-                {
-                    isValidInput = true;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid input. Please enter only numbers.");
-                    isValidInput = false;
-                }
-            }
-            return myId;
-        }
 
-        public void RemoveBook()
+        public void RemoveBook(int removeId)
         {
-                int removeId = RetrieveBookId();
                 Book bookToRemove = null;
                 foreach (Book book in Items)
                 {
@@ -150,7 +129,7 @@ namespace BookRentalSystem.App.Concrete
             Console.WriteLine("List of categories:");
             foreach (var book in Items)
             {
-                categories.Add(book.Category);
+                categories.Add(book.Category.ToLower());
             }
             for (int i = 0; i < categories.Count; i++) {
                 Console.WriteLine(categories[i]);
