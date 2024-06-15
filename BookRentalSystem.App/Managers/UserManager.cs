@@ -1,4 +1,5 @@
 ﻿using BookRentalSystem.App.Concrete;
+using BookRentalSystem.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace BookRentalSystem.App.Managers
             return _userService.RetrieveUsername(username); 
         } 
        
-        public bool RegisterUser (string name)
+        public User RegisterUser (string name)
         {
             bool result = false;
             while (!result) {
@@ -33,19 +34,19 @@ namespace BookRentalSystem.App.Managers
                     Console.WriteLine("Please write the username you would like to register with.");
                     name = Console.ReadLine();
                 }
-                int registered = _userService.RegisterUser(name);
-                if (registered != 0)
+                User registered = _userService.RegisterUser(name);
+                if (registered != null)
                 {
                     Console.WriteLine($"You have been successfully registered. Your id is {registered}, your username is {name}");
                     result = true;
-                    return true;
+                    return registered;
                 }
-                else if (registered == 0)
+                else if (registered == null )
                 {
                     Console.WriteLine("This username already exists, try another one");
                 }
             }
-            return false;
+            return null;
         }
     }
 }

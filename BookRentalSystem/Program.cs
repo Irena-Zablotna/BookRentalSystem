@@ -12,7 +12,7 @@ namespace BookRentalSystem
             BookService bookService = new BookService();
             MenuActionService menuActionService = new MenuActionService();
             UserManager userManager = new UserManager(userService);
-            BookManager bookManager = new BookManager(bookService);
+            BookManager bookManager = new BookManager(bookService, userService);
             bool adm = false;
             bool user = false;
             int choice;
@@ -20,6 +20,7 @@ namespace BookRentalSystem
             string usernameNow = userManager.RetrieveUsername();
             User actualUser = new User(usernameNow);
             int checkUser = userService.VerifyUser(usernameNow);
+
             if (checkUser == 1)
             {
                 adm = true;
@@ -30,10 +31,11 @@ namespace BookRentalSystem
             }
             else if (checkUser == 0)
             {
-                bool isRegistered = userManager.RegisterUser(usernameNow);
-                if (isRegistered)
+               actualUser = userManager.RegisterUser(usernameNow);
+                if (actualUser != null)
                 {
                     user = true;
+                    usernameNow = actualUser.Name;
                 }
             }
 
@@ -47,28 +49,23 @@ namespace BookRentalSystem
                     switch (choice)
                     {
                         case 1:
-                            bookService.SearchBookByAuthor();
+                            bookManager.SearchBookByAuthor();
                             break;
                         case 2:
                             bookService.PrintCategories();
-                            bookService.SearchBookByCategory();
+                            bookManager.SearchBookByCategory();
                             break;
                         case 3:
-                            bookService.SearchBookByTitle();
+                            bookManager.SearchBookByTitle();
                             break;
                         case 4:
-                            bookService.DisplayBookStatus();
+                            bookManager.DisplayBookStatus();
                             break;
                         case 5:
-                            
-                            int rentedBook = bookService.RentBook(usernameNow);
-                            if (rentedBook != null)
-                            {
-                                actualUser.Books.Add(new Book(rentedBook));
-                            }
+                            bookManager.RentBook(usernameNow);
                             break;
                         case 6:
-                            bookService.RateBook(actualUser);
+                            bookManager.RateBook(usernameNow);
                             break;
                         case 7:
                             Console.WriteLine("Work in progress");
@@ -80,7 +77,7 @@ namespace BookRentalSystem
                             bookManager.AddBook();
                             break;
                         case 10:
-                           bookService.RemoveBook();
+                            bookManager.RemoveBookById();
                             break;
                         case 11:
                             Console.WriteLine("Work in progress");

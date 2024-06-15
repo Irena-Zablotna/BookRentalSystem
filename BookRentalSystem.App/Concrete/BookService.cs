@@ -19,10 +19,14 @@ namespace BookRentalSystem.App.Concrete
         {
             Author author1 = new("Stephen", "King");
             Book book1 = new Book(1, author1, "It", "horror");
+            book1.Ratings.Add(4);
+            book1.Ratings.Add(2);
+            book1.Ratings.Add(5);
             Items.Add(book1);
             author1.authorBooks.Add(book1.Title);
             
             Book book5 = new Book(5, author1, "It", "horror");
+            book1.IsAvailable = false;
             Items.Add(book5);
             author1.authorBooks.Add(book1.Title);
 
@@ -40,7 +44,6 @@ namespace BookRentalSystem.App.Concrete
             Book book4 = new Book(4, author4, "Practical SQL", "tecnical manual");
             Items.Add(book4);
             author4.authorBooks.Add(book4.Title);
-
         }
 
         public int AddBook(Book book)
@@ -52,18 +55,16 @@ namespace BookRentalSystem.App.Concrete
              string category = book.Category;
              int id = Items.Count + 1;
              Book addedBook = new (id, author, title, category);
-                Items.Add(addedBook);
-                author.authorBooks.Add(addedBook.Title);
+              Items.Add(addedBook);
+              author.authorBooks.Add(addedBook.Title);
             return addedBook.Id;
             }
 
-
-        public void RemoveBook(int removeId)
+        public bool RemoveBook(Book bookToRemove)
         {
-                Book bookToRemove = null;
                 foreach (Book book in Items)
                 {
-                    if (book.Id == removeId)
+                    if (book.Id == bookToRemove.Id)
                     {
                         bookToRemove = book;
                         break;
@@ -72,54 +73,42 @@ namespace BookRentalSystem.App.Concrete
                 if (bookToRemove != null)
                 {
                     Items.Remove(bookToRemove);
-                    Console.WriteLine($"Book {bookToRemove.Id} - {bookToRemove.Title} removed");
+                    return true;
                 }
-                else
-                {
-                    Console.WriteLine("Book not found");
-                }
+                return false;
              }
 
-        public Book SearchBookByAuthor()
+        public List<Book> SearchBookByAuthor(string author)
         {
-            Console.Write("Enter the surname of the Author: ");
-            string author = Console.ReadLine();
-            bool found = false; 
+            var matchingBooks = Items
+                .Where(b => b.Author.Surname.Equals(author, StringComparison.OrdinalIgnoreCase))
+                .GroupBy(b => b.Title) 
+                .Select(g => g.First()) 
+                .ToList();
+            return matchingBooks;
+        }
 
-            foreach (var book in Items)
+        public Book ShowBooksByAuthor(string author)
+        {
+            List<Book> foundedBooks =SearchBookByAuthor(author);
+            if (foundedBooks.Any())
             {
-                if (book.Author.Surname.Equals(author, StringComparison.OrdinalIgnoreCase))
+                foreach (var book in foundedBooks)
                 {
-                    Console.WriteLine($"Title: {book.Title}, Category: {book.Category}");
-                    found = true;
                     return book;
                 }
-            }
-            if (!found)
-            {
-                Console.WriteLine("No books found for the specified author.");
             }
             return null;
         }
-        public Book SearchBookByCategory()
+        public Book SearchBookByCategory(string category)
         {
-            Console.Write("Enter a category: ");
-            string category = Console.ReadLine();
-            bool found = false;
             foreach (var book in Items)
             {   
-                
                 if (book.Category.Equals(category, StringComparison.OrdinalIgnoreCase))
                 {
-                    Console.WriteLine($" title {book.Title}, author {book.Author.Name}  {book.Author.Surname}, is book availabile? {book.IsAvailable}");
-                    found = true;
                     return book;
                 }
-            }
-            if (!found)
-            {
-                Console.WriteLine("No books found for the specified category.");
-            }
+            } 
             return null;
         }
 
@@ -135,118 +124,41 @@ namespace BookRentalSystem.App.Concrete
                 Console.WriteLine(categories[i]);
             }
         }
-        public Book SearchBookByTitle()
+        public Book SearchBookByTitle(string title)
         {
-            Console.Write("Enter the title of the book: ");
-            string title = Console.ReadLine();
-            bool found = false;
-
-            foreach (var book in Items)
+            var matchingBooks = Items.Where(b => b.Title.Equals(title, StringComparison.OrdinalIgnoreCase)).ToList();
+            var availableBook = matchingBooks.FirstOrDefault(b => b.IsAvailable);
+            if (availableBook != null)
             {
-                if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine(book.ToString());
-                    found = true;
-                    return book;
-                }
+                return availableBook;
             }
-            if (!found)
-            {
-                Console.WriteLine("No books found for the specified title.");
-            }
-            return null;
+            return matchingBooks.FirstOrDefault();
         }
 
-        public void DisplayBookStatus()
+
+        public int RentBook(string usernameNow, Book bookToRent, int numberOfDays)
         {
-            Console.Write("Enter the title of the book: ");
-            string title = Console.ReadLine();
-
-            foreach (var book in Items)
+            if (bookToRent.IsAvailable)
             {
-                if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
-                {
-                    Console.WriteLine($"Book status {book.Title}: {(book.IsAvailable ? "Available" : "Rented till ")}{book.ReturnDate}");
-                    return;
-                }
+                DateTime returnDate = DateTime.Now.AddDays(numberOfDays);
+                bookToRent.ReturnDate = returnDate;
+                bookToRent.IsAvailable = false;
+                return bookToRent.Id;
             }
-            Console.WriteLine("Book not found");
-        }
-
-        public int RentBook(string usernameNow)
-        {
-            Console.Write("Enter the title of the book you want to rent: ");
-            string title = Console.ReadLine();
-
-            foreach (var book in Items)
-            {
-                if (book.Title.Equals(title, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (book.IsAvailable)
-                    {
-                        int numberOfDays;
-                        bool isValidInput = false;
-                        while (!isValidInput)
-                        {
-                            Console.Write("Enter the number of days you want to rent the book for: ");
-                            if (int.TryParse(Console.ReadLine(), out numberOfDays))
-                            {
-                                DateTime returnDate = DateTime.Now.AddDays(numberOfDays);
-                                book.ReturnDate = returnDate;
-                                book.IsAvailable = false;
-                                Console.WriteLine($"You have rented {book.Title} for {numberOfDays} days. Return by: {returnDate.ToShortDateString()}.");
-                                book.Users.Add(new User(usernameNow));
-                                return book.Id;
-                            }
-                            else
-                            {
-                                Console.WriteLine("Invalid input. Please enter a valid number of days.");
-                            }
-                        }
-                        isValidInput = true; 
-                    }
-                    else
-                    {
-                        Console.WriteLine($"{book.Title} is not available.");
-                    }
-                }
-            }
-            Console.WriteLine("Book not found.");
             return 0;
         }
 
 
-        public int RateBook(User ratingUser)
+        public int AddRating(int rating, Book book)
         {
-            Console.WriteLine("Please, enter a title of the book you want to rate");
-            string title = Console.ReadLine();
-
-            Book rentedBook = ratingUser.Books.FirstOrDefault(b => string.Equals(b.Title, title, StringComparison.OrdinalIgnoreCase));
-            if (rentedBook == null)
+            if (book == null)
             {
-                Console.WriteLine($"User {ratingUser.Name} hasn't rented the book {title}.");
-                return 0;
+                var ratings = book.Ratings.ToList();
+                ratings.Add(rating);
             }
-            Console.WriteLine($"Please rate the book '{title}' (from 0 to 5): ");
-            int rating = 0;
-            bool isValidInput = false;
-            while (!isValidInput)
-            {
-                string input = Console.ReadLine();
-
-                if (int.TryParse(input, out rating) && rating >= 0 && rating <= 5)
-                {
-                    isValidInput = true;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid rating. Please enter a number from 0 to 5.");
-                }
-            }
-            rentedBook.Ratings.Add(rating);
-            Console.WriteLine($"Rating {rating} added successfully for the book {title}.");
-            return rentedBook.Id;
+           return book.Id;
         }
+
 
 
         public void ReadBookRatings()
@@ -255,10 +167,9 @@ namespace BookRentalSystem.App.Concrete
         }
 
 
-        public int ReturnBook()
+        public int ReturnBook(int myId)
         {
                 Book book1 = new Book();
-                int myId = RetrieveBookId();
                 foreach (var book in Items)
                 {
                     if (myId == book1.Id)

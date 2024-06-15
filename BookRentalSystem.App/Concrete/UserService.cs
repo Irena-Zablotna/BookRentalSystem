@@ -49,7 +49,7 @@ namespace BookRentalSystem.App.Concrete
         }
 
 
-        public int RegisterUser(string name)
+        public User RegisterUser(string name)
         {
                 bool usernameExists = false;
                 foreach (var user in Items)
@@ -66,13 +66,17 @@ namespace BookRentalSystem.App.Concrete
                     newUser.IsAdmin = false;
                     newUser.Id = Items.Count + 1;
                     Items.Add(newUser);
-                    return newUser.Id; 
+                    return newUser; 
                 }
                 else
                 {
-                    return 0;
+                    return null;
                 }
-            
+        }
+         public User GetUserByUsername(string username)
+        {
+            var user = Items.FirstOrDefault(p=> p.Name == username);
+            return user;
         }
     }
 }
