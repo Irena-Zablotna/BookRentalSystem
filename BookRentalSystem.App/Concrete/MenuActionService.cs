@@ -28,6 +28,7 @@ namespace BookRentalSystem.App.Concrete
             actionsToChoose.Add(new(6, "Rate the book", "userCategory"));
             actionsToChoose.Add(new(7, "Return the book", "userCategory"));
             actionsToChoose.Add(new(8, "Read ratings by title", "userCategory"));
+            actionsToChoose.Add(new(12, "View all books", "userCategory"));
 
             actionsToChoose.Add(new(9, "Add a new book", "adminCategory"));
             actionsToChoose.Add(new(10, "Remove a book", "adminCategory"));

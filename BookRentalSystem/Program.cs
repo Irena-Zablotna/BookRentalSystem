@@ -42,6 +42,7 @@ namespace BookRentalSystem
             bool exitRequested = false;
             while (!exitRequested)
             {
+                Console.Clear();
                 Console.Write("Let me know what you would like to do.\nPlease, enter Action id : \n");
                 menuActionService.DisplayMenuByCategory(adm, user);
                 if (int.TryParse(Console.ReadLine(), out choice))
@@ -81,6 +82,9 @@ namespace BookRentalSystem
                             break;
                         case 11:
                             Console.WriteLine("Work in progress");
+                            break;
+                        case 12:
+                            bookService.GetAll();
                             break;
                         case 0:
                             Console.WriteLine("Hello, thank you for using our Book Rental System.");

@@ -13,35 +13,44 @@ namespace BookRentalSystem.App.Concrete
     {
         public BookService()
         {
+            Items = new List<Book>();
             InitializeBooks();
         }
         public void InitializeBooks()
         {
             Author author1 = new("Stephen", "King");
-            Book book1 = new Book(1, author1, "It", "horror");
+            Book book1 = new Book(author1, "It", "horror");
             book1.Ratings.Add(4);
             book1.Ratings.Add(2);
             book1.Ratings.Add(5);
+            book1.Id = 1;
             Items.Add(book1);
             author1.authorBooks.Add(book1.Title);
-            
-            Book book5 = new Book(5, author1, "It", "horror");
-            book1.IsAvailable = false;
+
+            Book book5 = new Book(author1, "It", "horror");
+            book5.IsAvailable = false;
+            book5.Id = 2;
             Items.Add(book5);
-            author1.authorBooks.Add(book1.Title);
+            author1.authorBooks.Add(book5.Title); 
 
             Author author2 = new("Ken", "Follet");
-            Book book2 = new Book(2, author2, "The Pillars of the Earth", "historical");
+            Book book2 = new Book(author2, "The Pillars of the Earth", "historical");
+            book2.Id = 3;
             Items.Add(book2);
             author2.authorBooks.Add(book2.Title);
 
             Author author3 = new("Rachel", "Abbot");
-            Book book3 = new Book(3, author3, "Right Behind You", "detective");
+            Book book3 = new Book(author3, "Right Behind You", "detective");
+            book3.Id = 4;
             Items.Add(book3);
             author3.authorBooks.Add(book3.Title);
 
             Author author4 = new("Anthony", "De Barros");
-            Book book4 = new Book(4, author4, "Practical SQL", "tecnical manual");
+            Book book4 = new Book(author4, "Practical SQL", "tecnical manual");
+            book4.Ratings.Add(4);
+            book4.Ratings.Add(5);
+            book4.Ratings.Add(5);
+            book4.Id = 5;
             Items.Add(book4);
             author4.authorBooks.Add(book4.Title);
         }
@@ -53,9 +62,9 @@ namespace BookRentalSystem.App.Concrete
              Author author = new Author(name, surname);
              string title = book.Title;
              string category = book.Category;
-             int id = Items.Count + 1;
-             Book addedBook = new (id, author, title, category);
-              Items.Add(addedBook);
+             Book addedBook = new (author, title, category);
+             addedBook.Id = Items.Count + 1;
+            Items.Add(addedBook);
               author.authorBooks.Add(addedBook.Title);
             return addedBook.Id;
             }
@@ -124,9 +133,18 @@ namespace BookRentalSystem.App.Concrete
                 Console.WriteLine(categories[i]);
             }
         }
+        public void GetAll()
+        {
+           var  booksToShow = Items.ToList();
+            Console.WriteLine("The list of all books:");
+            foreach (var book in booksToShow)
+            {
+                Console.WriteLine(book.ToString());
+            }
+        }
         public Book SearchBookByTitle(string title)
         {
-            var matchingBooks = Items.Where(b => b.Title.Equals(title, StringComparison.OrdinalIgnoreCase)).ToList();
+            var matchingBooks = Items.Where(b => b.Title.Contains(title, StringComparison.OrdinalIgnoreCase)).ToList();
             var availableBook = matchingBooks.FirstOrDefault(b => b.IsAvailable);
             if (availableBook != null)
             {
@@ -134,7 +152,6 @@ namespace BookRentalSystem.App.Concrete
             }
             return matchingBooks.FirstOrDefault();
         }
-
 
         public int RentBook(string usernameNow, Book bookToRent, int numberOfDays)
         {
@@ -167,20 +184,19 @@ namespace BookRentalSystem.App.Concrete
         }
 
 
-        public int ReturnBook(int myId)
+        public int ReturnBook(string title)
         {
-                Book book1 = new Book();
-                foreach (var book in Items)
-                {
-                    if (myId == book1.Id)
-                    {
-                        book.IsAvailable = true;
-                    return book1.Id;
-                    }
-               else {
-                    Console.WriteLine("Book not found.");
-                    }
-                }
+            Book bookToReturn = SearchBookByTitle(title);
+
+            if (bookToReturn != null)
+            {
+                bookToReturn.IsAvailable = true;
+                bookToReturn.ReturnDate= DateTime.Now;
+                return bookToReturn.Id;
+            }
+            else {
+                Console.WriteLine("Book not found.");
+            }
             return 0;
            }
 

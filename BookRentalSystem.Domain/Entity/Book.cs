@@ -10,7 +10,6 @@ namespace BookRentalSystem.Domain.Entity
 {
  public class Book:BaseEntity
     {
-      
         public  Author Author{ get; set;}
         public string Title { get; }
         public string Category { get; }
@@ -18,15 +17,7 @@ namespace BookRentalSystem.Domain.Entity
         public DateTime? ReturnDate { get; set; }
         public List<int> Ratings { get; } 
         public List <User> Users { get; }
-        public Book(int id, Author author, string title, string category)
-        {
-            Author = author;
-            Title = title;
-            Category = category;
-            IsAvailable = true;
-            Ratings = new List<int>();
-            Users = new List<User>();
-        }
+      
         public Book(Author author, string title, string category)
         {
             Author = author;
@@ -38,15 +29,10 @@ namespace BookRentalSystem.Domain.Entity
         }
         public override string ToString()
         {
-            return $"{Title} by {Author.Name} {Author.Surname} ({Category}) {(IsAvailable ? "- Available" : "- Rented until ")}{ReturnDate}";
+            return $"{Id}. {Title} by {Author.Name} {Author.Surname} ({Category}) {(IsAvailable ? "- Available" : "- Rented until ")}{ReturnDate}";
         }
         public Book()
         {
-        }
-        public Book(int id)
-        {
-            Id= id;
-            Ratings = new List<int>();
         }
     }
 }

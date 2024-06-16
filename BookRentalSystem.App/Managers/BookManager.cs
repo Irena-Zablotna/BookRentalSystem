@@ -3,6 +3,7 @@ using BookRentalSystem.Domain.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,14 +20,14 @@ namespace BookRentalSystem.App.Managers
         }
         public int AddBook()
         {
-            Console.Write("Insert the name of the author: ");
+            Console.WriteLine("Insert the name of the author: ");
             string name = Console.ReadLine();
-            Console.Write("Insert the surname name of the author: ");
+            Console.WriteLine("Insert the surname name of the author: ");
             string surname = Console.ReadLine();
             Author author = new Author(name, surname);
-            Console.Write("Insert the title of the book: ");
+            Console.WriteLine("Insert the title of the book: ");
             string title = Console.ReadLine();
-            Console.Write("Insert the category of the book: ");
+            Console.WriteLine("Insert the category of the book: ");
             string category = Console.ReadLine();
             Book bookToAdd = new Book(author, title, category);
             _bookService.AddBook(bookToAdd);
@@ -73,94 +74,94 @@ namespace BookRentalSystem.App.Managers
 
         public Book SearchBookByAuthor()
         {
-            Console.Write("Enter the surname of the Author: ");
+            Console.WriteLine("Enter the surname of the Author: ");
             string author = Console.ReadLine();
-            Book foundedBook = _bookService.ShowBooksByAuthor(author);
-            if (foundedBook != null)
+            Book foundBook = _bookService.ShowBooksByAuthor(author);
+            if (foundBook != null)
             {
-                Console.WriteLine($"Title: {foundedBook.Title}, Category: {foundedBook.Category}");
+                Console.WriteLine($"Title: {foundBook.Title}, Category: {foundBook.Category}");
             }
             else
             {
                 Console.WriteLine("No books found for the specified author.");
             }
-            return foundedBook;
+            return foundBook;
         }
         public Book SearchBookByCategory()
         {
-            Console.Write("Enter a category: ");
+            Console.WriteLine("Enter a category: ");
             string category = Console.ReadLine();
-            Book foundedBook = _bookService.SearchBookByCategory(category);
-            if (foundedBook != null)
+            Book foundBook = _bookService.SearchBookByCategory(category);
+            if (foundBook != null)
             {
-                Console.WriteLine($" title {foundedBook.Title}, author {foundedBook.Author.Name}  {foundedBook.Author.Surname}, is book availabile? {foundedBook.IsAvailable}");
+                Console.WriteLine($" title {foundBook.Title}, author {foundBook.Author.Name}  {foundBook.Author.Surname}, is book availabile? {foundBook.IsAvailable}");
             }
             else
             {
                 Console.WriteLine("No books found for the specified category.");
             }
-            return foundedBook;
+            return foundBook;
         }
         public Book SearchBookByTitle()
         {
-            Console.Write("Enter the title of the book: ");
+            Console.WriteLine("Enter the title of the book: ");
             string title = Console.ReadLine();
-            Book foundedBook = _bookService.SearchBookByTitle(title);
-            if (foundedBook != null)
+            Book foundBook = _bookService.SearchBookByTitle(title);
+           
+            if (foundBook != null)
             {
-                Console.WriteLine(foundedBook.ToString());
+                Console.WriteLine(foundBook.ToString());
             }
             else
             {
                 Console.WriteLine("No books found for the specified title.");
             }
-            return foundedBook;
+            return foundBook;
         }
         public Book DisplayBookStatus()
         {
-            Console.Write("Enter the title of the book: ");
+            Console.WriteLine("Enter the title of the book: ");
             string title = Console.ReadLine();
-            Book foundedBook = _bookService.SearchBookByTitle(title);
-            if (foundedBook != null)
+            Book foundBook = _bookService.SearchBookByTitle(title);
+            if (foundBook != null)
             {
-                Console.WriteLine($"Book status {foundedBook.Title}: {(foundedBook.IsAvailable ? "Available" : "Rented till ")}{foundedBook.ReturnDate}");
+                Console.WriteLine($"Book status {foundBook.Title}: {(foundBook.IsAvailable ? "Available" : "Rented till ")}{foundBook.ReturnDate}");
             }
             else
             {
                 Console.WriteLine("No books found for the specified title.");
             }
-            return foundedBook;
+            return foundBook;
         }
         public int RentBook(string usernameNow)
         {
             bool correctValue = false;
             while (!correctValue)
             {
-                Console.Write("Enter the title of the book you want to rent: ");
+                Console.WriteLine("Enter the title of the book you want to rent: ");
                 string title = Console.ReadLine();
-                Book foundedBook = _bookService.SearchBookByTitle(title);
-                if (foundedBook != null)
+                Book foundBook = _bookService.SearchBookByTitle(title);
+                if (foundBook != null)
                 {
                     bool isValidInput = false;
                     while (!isValidInput)
                     {
-                        Console.Write("Enter the number of days you want to rent the book for: ");
+                        Console.WriteLine("Enter the number of days you want to rent the book for: ");
                         int numberOfDays;
                         if (int.TryParse(Console.ReadLine(), out numberOfDays))
                         {
                             isValidInput = true;
-                            int rentedBookId = _bookService.RentBook(usernameNow, foundedBook, numberOfDays);
+                            int rentedBookId = _bookService.RentBook(usernameNow, foundBook, numberOfDays);
                             var actualUser = _userService.GetUserByUsername(usernameNow);
-                            foundedBook.Users.Add(actualUser);
-                            actualUser.Books.Add(foundedBook);
-                            if (foundedBook.ReturnDate != null)
+                            foundBook.Users.Add(actualUser);
+                            actualUser.Books.Add(foundBook);
+                            if (foundBook.ReturnDate != null)
                             {
-                               Console.WriteLine($"DEBUG: Return date is set to: {foundedBook.ReturnDate}");
-                        Console.WriteLine($"You have rented {foundedBook.Title} for {numberOfDays} days. Return by: {foundedBook.ReturnDate.Value.ToShortDateString()}.");
+                                 Console.WriteLine($"You have rented {foundBook.Title} for {numberOfDays} days. Return by: {foundBook.ReturnDate.Value.ToShortDateString()}.");
                             }
                             else
                             {
-                                Console.WriteLine($"You have rented {foundedBook.Title} for {numberOfDays} days.");
+                                Console.WriteLine($"You have rented {foundBook.Title} for {numberOfDays} days.");
                             }
                         }
                         else
@@ -169,7 +170,7 @@ namespace BookRentalSystem.App.Managers
                         }
                     }
                     correctValue = true;
-                    return foundedBook.Id;
+                    return foundBook.Id;
                 }
                 else
                 {
@@ -183,8 +184,10 @@ namespace BookRentalSystem.App.Managers
             Console.WriteLine("Please, enter a title of the book you want to rate");
             string title = Console.ReadLine();
             var ratingUser = _userService.GetUserByUsername(username);
-            Book rentedBook = ratingUser.Books.FirstOrDefault(b => string.Equals(b.Title, title, StringComparison.OrdinalIgnoreCase));
-            if (rentedBook == null)
+            Book rentedBook = _bookService.SearchBookByTitle(title);
+            Book usersBook = ratingUser.Books.FirstOrDefault(b =>string.Equals(b.Title, title, StringComparison.OrdinalIgnoreCase));
+
+            if (rentedBook == null && string.Equals(rentedBook.Title, usersBook.Title, StringComparison.OrdinalIgnoreCase))
             {
                 Console.WriteLine($"User {ratingUser.Name} hasn't rented the book {title}.");
                 return 0;
@@ -205,8 +208,8 @@ namespace BookRentalSystem.App.Managers
                     Console.WriteLine("Invalid rating. Please enter a number from 0 to 5.");
                 }
             }
-            _bookService.AddRating(rating, rentedBook)
-            Console.WriteLine($"Rating {rating} added successfully for the book {title}.");
+            _bookService.AddRating(rating, rentedBook);
+            Console.WriteLine($"Rating {rating} added successfully for the book {usersBook.Title}.");
             return rentedBook.Id;
         }
 
