@@ -28,11 +28,15 @@ namespace BookRentalSystem.App.Concrete
             actionsToChoose.Add(new(6, "Rate the book", "userCategory"));
             actionsToChoose.Add(new(7, "Return the book", "userCategory"));
             actionsToChoose.Add(new(8, "Read ratings by title", "userCategory"));
-            actionsToChoose.Add(new(12, "View all books", "userCategory"));
+            actionsToChoose.Add(new(12, "View your history of rented books", "userCategory"));
 
             actionsToChoose.Add(new(9, "Add a new book", "adminCategory"));
             actionsToChoose.Add(new(10, "Remove a book", "adminCategory"));
-            actionsToChoose.Add(new(11, "Display statistics", "adminCategory"));
+            actionsToChoose.Add(new(11, "Display statistics of books", "adminCategory"));
+            actionsToChoose.Add(new(13, "Display statistics of Users", "adminCategory"));
+            actionsToChoose.Add(new(14, "View rented books by Username", "adminCategory"));
+            actionsToChoose.Add(new(15, "View all books", "adminCategory"));
+            actionsToChoose.Add(new(16, "View all users", "adminCategory"));
             actionsToChoose.Add(new(0, "Exit", null));
 
         }

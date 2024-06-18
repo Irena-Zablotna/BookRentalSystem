@@ -11,8 +11,10 @@ namespace BookRentalSystem.App.Concrete
 {
     public class BookService:BaseService<Book>
     {
-        public BookService()
+        private readonly UserService _userService;
+        public BookService(UserService userService)
         {
+            _userService = userService;
             Items = new List<Book>();
             InitializeBooks();
         }
@@ -153,6 +155,12 @@ namespace BookRentalSystem.App.Concrete
             return matchingBooks.FirstOrDefault();
         }
 
+        public List <Book> SearchBooksByUser(string username, string title) { 
+        User currentUser = _userService.GetUserByUsername(username);
+        var userBooks = currentUser.Books.ToList();
+        return userBooks;
+        }
+
         public int RentBook(string usernameNow, Book bookToRent, int numberOfDays)
         {
             if (bookToRent.IsAvailable)
@@ -184,10 +192,8 @@ namespace BookRentalSystem.App.Concrete
         }
 
 
-        public int ReturnBook(string title)
+        public int ReturnBook(Book bookToReturn)
         {
-            Book bookToReturn = SearchBookByTitle(title);
-
             if (bookToReturn != null)
             {
                 bookToReturn.IsAvailable = true;

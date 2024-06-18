@@ -9,7 +9,7 @@ namespace BookRentalSystem
         static void Main(string[] args)
         {
             UserService userService = new UserService();
-            BookService bookService = new BookService();
+            BookService bookService = new BookService( userService);
             MenuActionService menuActionService = new MenuActionService();
             UserManager userManager = new UserManager(userService);
             BookManager bookManager = new BookManager(bookService, userService);
@@ -69,7 +69,7 @@ namespace BookRentalSystem
                             bookManager.RateBook(usernameNow);
                             break;
                         case 7:
-                            Console.WriteLine("Work in progress");
+                            bookManager.ReturnBook(usernameNow);
                             break;
                         case 8:
                             Console.WriteLine("Work in progress");

@@ -213,5 +213,22 @@ namespace BookRentalSystem.App.Managers
             return rentedBook.Id;
         }
 
+        public int ReturnBook(string username) { 
+            Console.WriteLine("Please, enter a title of the book you want to return");
+            string title = Console.ReadLine();
+            var currentUser = _userService.GetUserByUsername(username);
+            Book rentedBook = _bookService.SearchBookByTitle(title);
+            Book usersBook = currentUser.Books.FirstOrDefault(b => string.Equals(b.Title, title, StringComparison.OrdinalIgnoreCase));
+            if (usersBook == null && string.Equals(rentedBook.Title, usersBook.Title, StringComparison.OrdinalIgnoreCase) && !usersBook.IsAvailable ) {
+                if (usersBook.ReturnDate< DateTime.Now) {
+                    Console.WriteLine($"You're returning the book late. You should have returned the book on {usersBook.ReturnDate}" +
+                        $"Next time, please adhere to the return date.");
+                }
+            _bookService.ReturnBook(rentedBook);
+                Console.WriteLine($"Thank you for returning the book \" {usersBook.Title}\"");
+                return rentedBook.Id;
+            }
+            return 0;
+        }
     }
 }

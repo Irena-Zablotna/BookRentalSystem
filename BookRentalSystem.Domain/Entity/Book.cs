@@ -31,8 +31,8 @@ namespace BookRentalSystem.Domain.Entity
         {
             return $"{Id}. {Title} by {Author.Name} {Author.Surname} ({Category}) {(IsAvailable ? "- Available" : "- Rented until ")}{ReturnDate}";
         }
-        public Book()
+        /*public Book()
         {
-        }
+        }*/
     }
 }
