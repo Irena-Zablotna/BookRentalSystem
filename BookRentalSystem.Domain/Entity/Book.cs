@@ -14,6 +14,7 @@ namespace BookRentalSystem.Domain.Entity
         public string Title { get; }
         public string Category { get; }
         public bool IsAvailable { get; set; }
+        public DateTime? RentDate { get; set; }
         public DateTime? ReturnDate { get; set; }
         public List<int> Ratings { get; } 
         public List <User> Users { get; }

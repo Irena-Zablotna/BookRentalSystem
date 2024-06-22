@@ -20,7 +20,7 @@ namespace BookRentalSystem.App.Concrete
 
         public void InitializeMenu()
         {
-            actionsToChoose.Add(new(1,"Search book by author", "userCategory"));
+            actionsToChoose.Add(new(1, "Search book by author", "userCategory"));
             actionsToChoose.Add(new(2, "Search book by category", "userCategory"));
             actionsToChoose.Add(new(3, "Search book by title", "userCategory"));
             actionsToChoose.Add(new(4, "View book status", "userCategory"));
@@ -44,7 +44,7 @@ namespace BookRentalSystem.App.Concrete
         public void PrintWelcomeMessage()
         {
             Console.WriteLine("Welcome to our automatic Book Rental Service!");
-           
+
         }
         public void DisplayMenuByCategory(bool adm, bool user)
         {
@@ -58,11 +58,21 @@ namespace BookRentalSystem.App.Concrete
                     }
                 }
             }
-            else if(user)
+            if (user)
             {
                 foreach (var menuAction in actionsToChoose)
                 {
                     if (menuAction.MenuCategory == "userCategory" || menuAction.MenuCategory == null)
+                    {
+                        Console.WriteLine($"{menuAction.Id} {menuAction.Name}");
+                    }
+                }
+            }
+            if (!adm && !user)
+            {
+                foreach (var menuAction in actionsToChoose)
+                {
+                    if (menuAction.MenuCategory == null)
                     {
                         Console.WriteLine($"{menuAction.Id} {menuAction.Name}");
                     }

@@ -22,8 +22,17 @@ namespace BookRentalSystem.App.Concrete
 
             Items.Add(new(2, "Irena"));
             Items.Add(new(3, "Robert"));
+            Items.Add(new(4, "Kajetan"));
         }
-
+        public void GetAll()
+        {
+            var usersToShow = Items.ToList();
+            Console.WriteLine("The list of all users:");
+            foreach (var user in usersToShow)
+            {
+                Console.WriteLine($"{user.Id}, {user.Name}");
+            }
+        }
         public string RetrieveUsername(string username)
         {
             if (username == null || username.Length == 0)

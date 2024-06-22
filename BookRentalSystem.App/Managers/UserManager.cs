@@ -26,27 +26,36 @@ namespace BookRentalSystem.App.Managers
        
         public User RegisterUser (string name)
         {
-            bool result = false;
-            while (!result) {
-                Console.WriteLine($"Do you want to be registered with username {name}? (y/n): ");
-                if (Console.ReadLine().ToLower() != "y")
+            Console.WriteLine("Do you want to sign up to use our service? (y/n): ");
+            if (Console.ReadLine().ToLower() == "y")
+            {
+                bool result = false;
+                while (!result)
                 {
-                    Console.WriteLine("Please write the username you would like to register with.");
-                    name = Console.ReadLine();
-                }
-                User registered = _userService.RegisterUser(name);
-                if (registered != null)
-                {
-                    Console.WriteLine($"You have been successfully registered. Your id is {registered}, your username is {name}");
-                    result = true;
-                    return registered;
-                }
-                else if (registered == null )
-                {
-                    Console.WriteLine("This username already exists, try another one");
+                    Console.WriteLine($"Do you want to be registered with username {name}? (y/n): ");
+                    if (Console.ReadLine().ToLower() != "y")
+                    {
+                        Console.WriteLine("Please write the username you would like to register with.");
+                        name = Console.ReadLine();
+                    }
+                    User registered = _userService.RegisterUser(name);
+                    if (registered != null)
+                    {
+                        Console.WriteLine($"You have been successfully registered. Your id is {registered}, your username is {name}");
+                        result = true;
+                        return registered;
+                    }
+                    else if (registered == null)
+                    {
+                        Console.WriteLine("This username already exists, try another one");
+                    }
                 }
             }
-            return null;
+            else
+            {
+                Console.WriteLine("We hope you will become our user soon. Goodbye!");
+            }
+                return null;
         }
     }
 }

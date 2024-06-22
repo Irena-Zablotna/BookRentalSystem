@@ -89,7 +89,7 @@ namespace BookRentalSystem.App.Managers
         }
         public Book SearchBookByCategory()
         {
-            Console.WriteLine("Enter a category: ");
+            Console.WriteLine("Enter a name of category: ");
             string category = Console.ReadLine();
             Book foundBook = _bookService.SearchBookByCategory(category);
             if (foundBook != null)
@@ -229,6 +229,47 @@ namespace BookRentalSystem.App.Managers
                 return rentedBook.Id;
             }
             return 0;
+        }
+        public void ShowMyBooks( string username) {
+            var currentUser = _userService.GetUserByUsername(username);
+            List<Book> userBooks = _bookService.SearchBooksByUser(username);
+            if (userBooks.Count > 0)
+            {
+                Console.WriteLine("Your history of rented books:");
+                foreach (var book in userBooks)
+                {
+                    Console.WriteLine($" author: {book.Author.Name} {book.Author.Surname}, title: {book.Title}, rented on:{book.RentDate.Value.ToShortDateString()}, date of return:{book.ReturnDate.Value.ToShortDateString()}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("You haven't rented any books yet. You can start now!");
+            }
+        }
+        public void ShowRatingByTitle() {
+            Console.WriteLine("Enter the title of the book you want to see the ratings for.");
+            string title = Console.ReadLine();
+            Book ratedBook = _bookService.SearchBookByTitle(title);
+            if (ratedBook != null)
+            {
+                List<int> ratings = _bookService.ReadBookRatings(ratedBook);
+                if (ratings.Count > 0)
+                {
+                    Console.WriteLine($"Ratings of {title} of {ratedBook.Author.Name} {ratedBook.Author.Surname}");
+                    for (int i = 0; i < ratings.Count; i++)
+                    {
+                        Console.Write($"{ratings[i]}, ");
+                        Console.WriteLine();
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"{title} of {ratedBook.Author} has no ratings yet.");
+                }
+            }
+            else { 
+                Console.WriteLine("No books found for the specified title."); 
+            }
         }
     }
 }
