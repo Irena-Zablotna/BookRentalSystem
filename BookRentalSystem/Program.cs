@@ -13,6 +13,7 @@ namespace BookRentalSystem
             MenuActionService menuActionService = new MenuActionService();
             UserManager userManager = new UserManager(userService);
             BookManager bookManager = new BookManager(bookService, userService);
+            AdminManager adminManager = new AdminManager(bookService,userService);
             bool adm = false;
             bool user = false;
             int choice;
@@ -74,11 +75,11 @@ namespace BookRentalSystem
                             Console.WriteLine();
                             break;
                         case 6:
-                            bookManager.RateBook(usernameNow);
+                            bookManager.ReturnBook(usernameNow);
                             Console.WriteLine();
                             break;
                         case 7:
-                            bookManager.ReturnBook(usernameNow);
+                            bookManager.RateBook(usernameNow);
                             Console.WriteLine();
                             break;
                         case 8:
@@ -86,25 +87,27 @@ namespace BookRentalSystem
                             Console.WriteLine();
                             break;
                         case 9:
-                            bookManager.AddBook();
-                            Console.WriteLine();
-                            break;
-                        case 10:
-                            bookManager.RemoveBookById();
-                            Console.WriteLine();
-                            break;
-                        case 11:
-                            Console.WriteLine("Work in progress");
-                            break;
-                        case 12:
                             bookManager.ShowMyBooks(usernameNow);
                             Console.WriteLine();
                             break;
+                        case 10:
+                            bookManager.AddBook();
+                            Console.WriteLine();
+                            break;
+                        case 11:
+                            bookManager.RemoveBookById();
+                            break;
+                        case 12:
+                            adminManager.DisplayBookStatistics();
+                            Console.WriteLine();
+                            break;
                         case 13:
-                            Console.WriteLine("Work in progress");
+                            adminManager.DisplayUserStatistics();
+                            Console.WriteLine();
                             break;
                         case 14:
-                            Console.WriteLine("Work in progress");
+                            adminManager.ViewBooksByUsername();
+                            Console.WriteLine();
                             break;
                         case 15:
                             bookService.GetAll();
@@ -112,6 +115,11 @@ namespace BookRentalSystem
                             break;
                         case 16:
                             userService.GetAll();
+                            Console.WriteLine();
+                            break;
+                        case 17:
+                            adminManager.RemoveUserById();
+                            Console.WriteLine();
                             break;
                         case 0:
                             Console.WriteLine("Hello, thank you for using our Book Rental System.");
@@ -128,7 +136,6 @@ namespace BookRentalSystem
                     Console.WriteLine("The value you entered is incorrect, try again");
                 }
             }
-
         }
     }
   }

@@ -24,7 +24,7 @@ namespace BookRentalSystem.App.Concrete
             Items.Add(new(3, "Robert"));
             Items.Add(new(4, "Kajetan"));
         }
-        public void GetAll()
+        public List <User> GetAll()
         {
             var usersToShow = Items.ToList();
             Console.WriteLine("The list of all users:");
@@ -32,6 +32,7 @@ namespace BookRentalSystem.App.Concrete
             {
                 Console.WriteLine($"{user.Id}, {user.Name}");
             }
+            return usersToShow;
         }
         public string RetrieveUsername(string username)
         {
@@ -86,6 +87,36 @@ namespace BookRentalSystem.App.Concrete
         {
             var user = Items.FirstOrDefault(p=> p.Name == username);
             return user;
+        }
+        public User MostRenting()
+        {
+            var mostRentingUser = Items.Where(u =>u.Books.Count > 0)
+                .OrderByDescending (u=>u.Books.Count)
+                .FirstOrDefault();
+            return mostRentingUser;
+        }
+        public User LeastRenting()
+        {
+            var leastRentingUser = Items.Where(u => u.Books.Count > 0)
+                .OrderBy(u => u.Books.Count)
+                .FirstOrDefault();
+            return leastRentingUser;
+        }
+
+        public List<User> ZeroRenting()
+        {
+            var zeroRentingUsers = Items.Where(u =>u.Books.Count == 0).ToList();
+            return zeroRentingUsers;
+        }
+        public bool RemoveUserById(int id)
+        {
+            User userToRemove = Items.Find(u => u.Id == id);
+            if (userToRemove != null)
+            {
+                Items.Remove(userToRemove);
+                return true;
+            }
+            return false;
         }
     }
 }

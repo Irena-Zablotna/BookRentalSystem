@@ -91,8 +91,11 @@ namespace BookRentalSystem.App.Concrete
                     Items.Remove(bookToRemove);
                     return true;
                 }
+            else
+            {
                 return false;
-             }
+            }
+          }
 
         public List<Book> SearchBookByAuthor(string author)
         {
@@ -106,10 +109,10 @@ namespace BookRentalSystem.App.Concrete
 
         public Book ShowBooksByAuthor(string author)
         {
-            List<Book> foundedBooks =SearchBookByAuthor(author);
-            if (foundedBooks.Any())
+            List<Book> foundBooks =SearchBookByAuthor(author);
+            if (foundBooks.Any())
             {
-                foreach (var book in foundedBooks)
+                foreach (var book in foundBooks)
                 {
                     return book;
                 }
@@ -145,14 +148,10 @@ namespace BookRentalSystem.App.Concrete
         }
 
 
-        public void GetAll()
+        public List <Book> GetAll()
         {
            var  booksToShow = Items.ToList();
-            Console.WriteLine("The list of all books:");
-            foreach (var book in booksToShow)
-            {
-                Console.WriteLine(book.ToString());
-            }
+            return booksToShow;
         }
         public Book SearchBookByTitle(string title)
         {
@@ -218,11 +217,34 @@ namespace BookRentalSystem.App.Concrete
             return 0;
            }
 
-        public void DisplayStatistics()
+        public Book MostRented()
         {
-            //to do
+            var mostRentedBook = Items.OrderByDescending(b => b.Users.Count).FirstOrDefault();
+            return mostRentedBook;
         }
 
+        public Book LeastRented()
+        {
+            var leastRentedBook = Items.OrderBy(b => b.Users.Count).FirstOrDefault();
+            return leastRentedBook;
+        }
+
+        public Book BestRated()
+        {
+            var bestRatedBook = Items
+                .Where(b => b.Ratings.Count > 0)
+                .OrderByDescending(b => b.Ratings.Average())
+                .FirstOrDefault();
+            return bestRatedBook;
+        }
+        public Book WorstRated()
+        {
+            var worstRatedBook = Items
+                .Where(b => b.Ratings.Count > 0)
+                .OrderBy(b => b.Ratings.Average())
+                .FirstOrDefault();
+            return worstRatedBook;
+        }
     }
 }
 
